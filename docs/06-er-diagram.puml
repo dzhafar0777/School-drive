@@ -1,0 +1,105 @@
+
+@startuml
+title ER Diagram - School Drive Database
+
+hide circle
+skinparam linetype ortho
+skinparam shadowing false
+
+entity "users" as users {
+    * id : BIGINT <<PK>>
+    --
+    full_name : VARCHAR
+    username : VARCHAR <<UNIQUE>>
+    email : VARCHAR <<UNIQUE>>
+    password_hash : VARCHAR
+    role : VARCHAR
+    created_at : TIMESTAMP
+}
+
+entity "students" as students {
+    * id : BIGINT <<PK>>
+    --
+    user_id : BIGINT <<FK>>
+    student_number : VARCHAR <<UNIQUE>>
+    course : INT
+}
+
+entity "teachers" as teachers {
+    * id : BIGINT <<PK>>
+    --
+    user_id : BIGINT <<FK>>
+    specialization : VARCHAR
+}
+
+entity "subjects" as subjects {
+    * id : BIGINT <<PK>>
+    --
+    name : VARCHAR
+    description : TEXT
+}
+
+entity "categories" as categories {
+    * id : BIGINT <<PK>>
+    --
+    name : VARCHAR
+    description : TEXT
+}
+
+entity "materials" as materials {
+    * id : BIGINT <<PK>>
+    --
+    teacher_id : BIGINT <<FK>>
+    subject_id : BIGINT <<FK>>
+    category_id : BIGINT <<FK>>
+    title : VARCHAR
+    description : TEXT
+    created_at : TIMESTAMP
+}
+
+entity "material_files" as material_files {
+    * id : BIGINT <<PK>>
+    --
+    material_id : BIGINT <<FK>>
+    file_name : VARCHAR
+    file_path : VARCHAR
+    file_type : VARCHAR
+    file_size : BIGINT
+}
+
+entity "assignments" as assignments {
+    * id : BIGINT <<PK>>
+    --
+    teacher_id : BIGINT <<FK>>
+    subject_id : BIGINT <<FK>>
+    title : VARCHAR
+    description : TEXT
+    deadline : DATETIME
+}
+
+entity "submissions" as submissions {
+    * id : BIGINT <<PK>>
+    --
+    assignment_id : BIGINT <<FK>>
+    student_id : BIGINT <<FK>>
+    file_path : VARCHAR
+    submitted_at : TIMESTAMP
+    status : VARCHAR
+}
+
+users ||--o| students : has
+users ||--o| teachers : has
+
+teachers ||--o{ materials : uploads
+subjects ||--o{ materials : contains
+categories ||--o{ materials : classifies
+
+materials ||--o{ material_files : has
+
+teachers ||--o{ assignments : creates
+subjects ||--o{ assignments : contains
+
+assignments ||--o{ submissions : receives
+students ||--o{ submissions : submits
+
+@enduml
