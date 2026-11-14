@@ -1,0 +1,108 @@
+
+@startuml
+title Class Diagram - School Drive System
+
+skinparam classAttributeIconSize 0
+skinparam shadowing false
+
+class User {
+    +id: int
+    +fullName: string
+    +username: string
+    +email: string
+    +passwordHash: string
+    +role: string
+    +login()
+    +logout()
+    +updateProfile()
+}
+
+class Student {
+    +id: int
+    +studentNumber: string
+    +course: int
+    +viewMaterials()
+    +downloadMaterial()
+    +viewAssignments()
+}
+
+class Teacher {
+    +id: int
+    +specialization: string
+    +uploadMaterial()
+    +updateMaterial()
+    +deleteMaterial()
+    +createAssignment()
+}
+
+class Administrator {
+    +manageUsers()
+    +manageSubjects()
+    +manageCategories()
+    +managePermissions()
+}
+
+class Subject {
+    +id: int
+    +name: string
+    +description: string
+    +create()
+    +update()
+    +delete()
+}
+
+class Category {
+    +id: int
+    +name: string
+    +description: string
+}
+
+class Material {
+    +id: int
+    +title: string
+    +description: string
+    +filePath: string
+    +fileType: string
+    +fileSize: long
+    +createdAt: datetime
+    +upload()
+    +update()
+    +delete()
+}
+
+class Assignment {
+    +id: int
+    +title: string
+    +description: string
+    +deadline: datetime
+    +createdAt: datetime
+    +create()
+    +update()
+    +delete()
+}
+
+class Submission {
+    +id: int
+    +filePath: string
+    +submittedAt: datetime
+    +status: string
+    +submit()
+    +update()
+}
+
+User <|-- Student
+User <|-- Teacher
+User <|-- Administrator
+
+Teacher "1" -- "0..*" Material : uploads
+Teacher "1" -- "0..*" Assignment : creates
+
+Subject "1" -- "0..*" Material : contains
+Subject "1" -- "0..*" Assignment : contains
+
+Category "1" -- "0..*" Material : classifies
+
+Student "1" -- "0..*" Submission : makes
+Assignment "1" -- "0..*" Submission : receives
+
+@enduml
