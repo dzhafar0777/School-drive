@@ -1,0 +1,55 @@
+
+@startuml
+title Component Diagram - School Drive System
+
+skinparam componentStyle rectangle
+skinparam shadowing false
+
+actor "Administrator" as Admin
+actor "Teacher" as Teacher
+actor "Student" as Student
+
+package "School Drive System" {
+
+    component "Web Interface" as UI
+
+    component "Authentication Module" as Auth
+    component "User Management Module" as Users
+    component "Subject Management Module" as Subjects
+    component "Material Management Module" as Materials
+    component "Assignment Management Module" as Assignments
+    component "Search Module" as Search
+    component "Access Control Module" as Access
+
+    database "Database" as DB
+    folder "File Storage" as Storage
+}
+
+Admin --> UI
+Teacher --> UI
+Student --> UI
+
+UI --> Auth
+UI --> Users
+UI --> Subjects
+UI --> Materials
+UI --> Assignments
+UI --> Search
+
+Auth --> Users
+Users --> Access
+
+Materials --> Subjects
+Materials --> Access
+Materials --> Storage
+Materials --> DB
+
+Assignments --> Subjects
+Assignments --> DB
+
+Search --> DB
+Subjects --> DB
+Users --> DB
+Access --> DB
+
+@enduml
