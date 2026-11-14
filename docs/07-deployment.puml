@@ -1,0 +1,53 @@
+
+@startuml
+title Deployment Diagram - School Drive
+
+skinparam shadowing false
+skinparam componentStyle rectangle
+
+node "Client Device" as Client {
+    artifact "Web Browser" as Browser
+}
+
+node "Web Server" as WebServer {
+    component "Web Interface" as UI
+}
+
+node "Application Server" as AppServer {
+    component "School Drive Backend" as Backend
+
+    component "Authentication Module" as Auth
+    component "User Management" as UserManagement
+    component "Material Management" as MaterialManagement
+    component "Assignment Management" as AssignmentManagement
+    component "Search Module" as Search
+}
+
+node "Database Server" as DBServer {
+    database "School Drive Database" as DB
+}
+
+node "File Storage" as FileServer {
+    folder "Educational Materials" as Materials
+    folder "Assignment Submissions" as Submissions
+}
+
+Browser --> UI : HTTPS
+UI --> Backend : HTTP / API
+
+Backend --> Auth
+Backend --> UserManagement
+Backend --> MaterialManagement
+Backend --> AssignmentManagement
+Backend --> Search
+
+Auth --> DB : SQL
+UserManagement --> DB : SQL
+MaterialManagement --> DB : SQL
+AssignmentManagement --> DB : SQL
+Search --> DB : SQL
+
+MaterialManagement --> Materials : Upload / Download
+AssignmentManagement --> Submissions : Upload / Download
+
+@enduml
