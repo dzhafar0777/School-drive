@@ -1,0 +1,52 @@
+
+@startuml
+title Sequence Diagram - Upload Educational Material
+
+actor Teacher
+participant "Web Interface" as UI
+participant "Authentication" as Auth
+participant "Material Service" as Service
+participant "File Storage" as Storage
+database "Database" as DB
+
+Teacher -> UI: Ворид кардани номи корбар ва рамз
+UI -> Auth: Санҷиши маълумоти воридшавӣ
+Auth --> UI: Натиҷаи санҷиш
+
+alt Воридшавӣ муваффақ аст
+
+    UI --> Teacher: Кушодани саҳифаи асосӣ
+
+    Teacher -> UI: Интихоби бахши мавод
+    UI --> Teacher: Намоиши шакли боркунӣ
+
+    Teacher -> UI: Ворид кардани маълумот ва интихоби файл
+    UI -> Service: Ирсоли маълумоти мавод
+
+    Service -> Service: Санҷиши маълумот ва файл
+
+    alt Маълумот дуруст аст
+
+        Service -> Storage: Нигоҳ доштани файл
+        Storage --> Service: Роҳи файл
+
+        Service -> DB: Сабти маълумоти мавод
+        DB --> Service: Тасдиқи сабт
+
+        Service --> UI: Боркунӣ муваффақ шуд
+        UI --> Teacher: Намоиши паёми муваффақият
+
+    else Маълумот нодуруст аст
+
+        Service --> UI: Баргардонидани хатогӣ
+        UI --> Teacher: Намоиши паёми хатогӣ
+
+    end
+
+else Воридшавӣ номуваффақ аст
+
+    UI --> Teacher: Намоиши хатои воридшавӣ
+
+end
+
+@enduml
